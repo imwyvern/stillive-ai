@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HireAI — Pitch Deck</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+.slide {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 80px;
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.slide-number {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.3);
+  font-weight: 500;
+}
+
+/* Slide 1: Cover */
+.cover {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 50%, #0a1628 100%);
+  text-align: center;
+  align-items: center;
+}
+.cover .logo {
+  font-size: 72px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+}
+.cover .tagline {
+  font-size: 28px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 40px;
+}
+.cover .motto {
+  font-size: 20px;
+  font-style: italic;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 60px;
+}
+.cover .round {
+  font-size: 18px;
+  color: #667eea;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+/* Common styles */
+h1 {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 40px;
+  line-height: 1.1;
+}
+h1 span { color: #667eea; }
+
+h2 {
+  font-size: 24px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 40px;
+}
+
+.highlight {
+  color: #667eea;
+  font-weight: 700;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  margin: 40px 0;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+}
+.stat-card .number {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stat-card .label {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 8px;
+}
+
+.quote {
+  background: rgba(102,126,234,0.08);
+  border-left: 3px solid #667eea;
+  padding: 20px 30px;
+  border-radius: 0 12px 12px 0;
+  font-style: italic;
+  color: rgba(255,255,255,0.7);
+  margin: 30px 0;
+  font-size: 18px;
+}
+.quote .author {
+  font-style: normal;
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 10px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 30px 0;
+}
+.feature-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 24px;
+}
+.feature-card .icon { font-size: 28px; margin-bottom: 12px; }
+.feature-card .title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.feature-card .desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin: 40px 0;
+}
+.step {
+  text-align: center;
+  padding: 30px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.step .num {
+  font-size: 48px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.step .step-title { font-size: 20px; font-weight: 600; margin: 12px 0 8px; }
+.step .step-desc { font-size: 14px; color: rgba(255,255,255,0.5); }
+
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  color: #667eea;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+td {
+  padding: 14px 16px;
+  font-size: 15px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.8);
+}
+tr:hover { background: rgba(255,255,255,0.02); }
+
+.comparison td:first-child { font-weight: 600; }
+.comparison .us { background: rgba(102,126,234,0.1); }
+.comparison .us td { color: #667eea; font-weight: 600; }
+
+.tam-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin: 40px 0;
+}
+.tam-circle {
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.tam-circle .amount { font-weight: 800; }
+.tam-circle .tam-label { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+.timeline {
+  margin: 30px 0;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #667eea, #764ba2);
+}
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-left: 50px;
+  position: relative;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #667eea;
+  border: 3px solid #000;
+}
+.timeline-item.current::before {
+  background: #ffd700;
+  box-shadow: 0 0 20px rgba(255,215,0,0.5);
+}
+.timeline-year { font-weight: 700; min-width: 60px; color: rgba(255,255,255,0.4); }
+.timeline-text { margin-left: 16px; }
+
+.moat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin: 30px 0;
+}
+.moat-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 28px;
+}
+.moat-card .moat-num {
+  font-size: 14px;
+  font-weight: 700;
+  color: #667eea;
+  margin-bottom: 8px;
+}
+.moat-card .moat-title { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+.moat-card .moat-desc { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+.funds-bar {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 40px;
+  margin: 30px 0;
+}
+.funds-bar div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cta {
+  background: linear-gradient(135deg, #0a0a2e 0%, #1a0a3e 50%, #0a1628 100%);
+  text-align: center;
+  align-items: center;
+}
+.cta .logo { font-size: 56px; font-weight: 900; color: #667eea; margin-bottom: 30px; }
+.cta h1 { font-size: 36px; }
+.cta .contact { margin-top: 40px; font-size: 18px; color: rgba(255,255,255,0.6); }
+.cta .contact a { color: #667eea; text-decoration: none; }
+
+.pill {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.pill-green { background: rgba(34,197,94,0.15); color: #22c55e; }
+.pill-blue { background: rgba(102,126,234,0.15); color: #667eea; }
+.pill-yellow { background: rgba(234,179,8,0.15); color: #eab308; }
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+ul li {
+  padding: 8px 0;
+  padding-left: 24px;
+  position: relative;
+  color: rgba(255,255,255,0.7);
+  font-size: 16px;
+  line-height: 1.6;
+}
+ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #667eea;
+}
+
+.big-number {
+  font-size: 64px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+</style>
+</head>
+<body>
+
+<!-- Slide 1: Cover -->
+<div class="slide cover">
+  <div class="slide-number">01</div>
+  <div class="logo">HireAI</div>
+  <div class="tagline">AI Workforce-as-a-Service</div>
+  <div class="motto">"We don't replace developers. We manufacture them."</div>
+  <div class="round">SEED ROUND · $2M · Q2 2026</div>
+</div>
+
+<!-- Slide 2: Problem -->
+<div class="slide">
+  <div class="slide-number">02</div>
+  <h1>The <span>Problem</span></h1>
+  <h2>The global developer shortage is getting worse — and money can't fix it.</h2>
+  
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="number">27M</div>
+      <div class="label">Developer shortfall worldwide</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">62 days</div>
+      <div class="label">Average time to hire a senior dev</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">$35K</div>
+      <div class="label">Average cost per developer hire</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">+40%</div>
+      <div class="label">Remote dev salary increase since 2022</div>
+    </div>
+  </div>
+  
+  <div class="quote">
+    "We posted a Senior React role 3 months ago. 200 applicants, 5 interviews, 0 hires. Meanwhile our roadmap is bleeding."
+    <div class="author">— CTO, Series B SaaS Company</div>
+  </div>
+  
+  <p style="font-size:20px; color:rgba(255,255,255,0.6); margin-top:20px;">
+    <span class="highlight">$300B+</span> spent annually on software development labor. The supply side is fundamentally broken.
+  </p>
+</div>
+
+<!-- Slide 3: Solution -->
+<div class="slide">
+  <div class="slide-number">03</div>
+  <h1>The <span>Solution</span></h1>
+  <h2>AI Employees that actually ship code — not just suggest it.</h2>
+  
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="icon">🔌</div>
+      <div class="title">Plug Into Your Stack</div>
+      <div class="desc">GitHub, GitLab, Slack, Jira, Linear, Notion — zero workflow change required.</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🧠</div>
+      <div class="title">Deep Context</div>
+      <div class="desc">Reads your entire codebase, docs, and conventions. Understands YOUR project.</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon">💻</div>
+      <div class="title">Ship Production Code</div>
+      <div class="desc">PRs, bug fixes, tests, refactors, documentation — all production-ready.</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon">💬</div>
+      <div class="title">Natural Communication</div>
+      <div class="desc">Slack messages, standup updates, PR review responses — like a real teammate.</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📊</div>
+      <div class="title">Self-Reporting</div>
+      <div class="desc">Auto-generated daily standups, weekly reports, and progress dashboards.</div>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🔄</div>
+      <div class="title">Learns Over Time</div>
+      <div class="desc">Persistent memory means it gets better at YOUR codebase. Compounding advantage.</div>
+    </div>
+  </div>
+  
+  <p style="text-align:center; font-size:20px; font-weight:600; color:#667eea; margin-top:20px;">
+    Not a copilot. Not an assistant. A full team member.
+  </p>
+</div>
+
+<!-- Slide 4: How It Works -->
+<div class="slide">
+  <div class="slide-number">04</div>
+  <h1>How It <span>Works</span></h1>
+  <h2>3 steps to your AI engineering team</h2>
+  
+  <div class="steps">
+    <div class="step">
+      <div class="num">01</div>
+      <div class="step-title">Connect</div>
+      <div class="step-desc">Link your GitHub, Slack, and project management tools. 5-minute setup.</div>
+    </div>
+    <div class="step">
+      <div class="num">02</div>
+      <div class="step-title">Assign</div>
+      <div class="step-desc">Create tickets like you would for a human dev. No special syntax needed.</div>
+    </div>
+    <div class="step">
+      <div class="num">03</div>
+      <div class="step-title">Ship</div>
+      <div class="step-desc">AI writes code, submits PRs, responds to reviews. Your team just merges.</div>
+    </div>
+  </div>
+  
+  <div class="quote">
+    <strong>Human-in-the-loop:</strong> Your team reviews & merges PRs as usual.<br>
+    The AI handles the building. Your engineers handle the thinking.
+  </div>
+</div>
+
+<!-- Slide 5: Market Size -->
+<div class="slide">
+  <div class="slide-number">05</div>
+  <h1>Market <span>Size</span></h1>
+  <h2>We're entering the largest labor market in tech</h2>
+  
+  <div style="display:flex; align-items:center; justify-content:center; gap:60px; margin:40px 0;">
+    <div class="tam-circle" style="width:280px;height:280px;background:rgba(102,126,234,0.08);border:2px solid rgba(102,126,234,0.2);">
+      <div class="amount" style="font-size:36px;color:#667eea;">$300B</div>
+      <div class="tam-label">TAM</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;">Global dev labor</div>
+    </div>
+    <div class="tam-circle" style="width:200px;height:200px;background:rgba(118,75,162,0.1);border:2px solid rgba(118,75,162,0.3);">
+      <div class="amount" style="font-size:28px;color:#764ba2;">$45B</div>
+      <div class="tam-label">SAM</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;">Remote dev market</div>
+    </div>
+    <div class="tam-circle" style="width:140px;height:140px;background:rgba(255,215,0,0.08);border:2px solid rgba(255,215,0,0.3);">
+      <div class="amount" style="font-size:22px;color:#ffd700;">$500M</div>
+      <div class="tam-label">SOM</div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:4px;">Year 1-3</div>
+    </div>
+  </div>
+  
+  <p style="text-align:center;color:rgba(255,255,255,0.5);font-size:16px;">
+    Adjacent expansion: QA ($40B) · DevOps ($25B) · Data Engineering ($20B) · Tech Writing ($10B)
+  </p>
+</div>
+
+<!-- Slide 6: Business Model -->
+<div class="slide">
+  <div class="slide-number">06</div>
+  <h1>Business <span>Model</span></h1>
+  <h2>SaaS + Usage-Based · 80-90% Gross Margin</h2>
+  
+  <table>
+    <tr><th>Plan</th><th>Price</th><th>What You Get</th><th>vs. Human Dev</th></tr>
+    <tr>
+      <td><span class="pill pill-green">Starter</span></td>
+      <td style="font-weight:700;color:#22c55e;">$2,000/mo</td>
+      <td>1 AI Engineer · 40 hrs/week</td>
+      <td>vs. $6,000/mo junior</td>
+    </tr>
+    <tr>
+      <td><span class="pill pill-blue">Team</span></td>
+      <td style="font-weight:700;color:#667eea;">$8,000/mo</td>
+      <td>5 AI Engineers · Full integration</td>
+      <td>vs. $40,000/mo team</td>
+    </tr>
+    <tr>
+      <td><span class="pill pill-yellow">Enterprise</span></td>
+      <td style="font-weight:700;color:#eab308;">Custom</td>
+      <td>Unlimited · Custom model training · SLA</td>
+      <td>vs. $200K+/mo team</td>
+    </tr>
+  </table>
+  
+  <div class="two-col" style="margin-top:40px;">
+    <div>
+      <h3 style="color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:16px;">UNIT ECONOMICS</h3>
+      <ul>
+        <li>Cost to serve 1 AI Engineer: <strong>~$300/mo</strong></li>
+        <li>Revenue per AI Engineer: <strong>$2,000/mo</strong></li>
+        <li>Gross margin: <strong style="color:#22c55e;">85%</strong></li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:16px;">COST SAVINGS FOR CUSTOMERS</h3>
+      <ul>
+        <li>Junior dev replacement: <strong>67% savings</strong></li>
+        <li>Senior dev replacement: <strong>80% savings</strong></li>
+        <li>No hiring costs, no benefits, no churn</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 7: Traction -->
+<div class="slide">
+  <div class="slide-number">07</div>
+  <h1>Early <span>Traction</span></h1>
+  <h2>We've already built the core engine and validated the concept</h2>
+  
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="number">80%</div>
+      <div class="label">Task completion rate (AI independent)</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">50+</div>
+      <div class="label">Daily automated tasks</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">10+</div>
+      <div class="label">Open-source PRs merged</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">3</div>
+      <div class="label">Pilot customers in beta</div>
+    </div>
+  </div>
+  
+  <h3 style="color:rgba(255,255,255,0.5);font-size:14px;margin:30px 0 16px;">GROWTH TRAJECTORY</h3>
+  <table>
+    <tr><th>Quarter</th><th>Customers</th><th>MRR</th><th>Milestone</th></tr>
+    <tr><td>Q2 2026</td><td>3</td><td>$6K</td><td>Seed close</td></tr>
+    <tr><td>Q3 2026</td><td>20</td><td>$40K</td><td>Product-market fit</td></tr>
+    <tr><td>Q4 2026</td><td>50</td><td>$100K</td><td>First enterprise deal</td></tr>
+    <tr><td>Q2 2027</td><td>200</td><td>$500K</td><td>International expansion</td></tr>
+    <tr style="background:rgba(102,126,234,0.1);"><td style="color:#667eea;font-weight:700;">Q4 2027</td><td style="color:#667eea;font-weight:700;">500</td><td style="color:#667eea;font-weight:700;">$1.5M</td><td style="color:#667eea;font-weight:700;">Series A ready</td></tr>
+  </table>
+</div>
+
+<!-- Slide 8: Competition -->
+<div class="slide">
+  <div class="slide-number">08</div>
+  <h1>Competitive <span>Landscape</span></h1>
+  <h2>We're not a coding tool — we're a workforce</h2>
+  
+  <table class="comparison">
+    <tr><th></th><th>GitHub Copilot</th><th>Cursor</th><th>Devin</th><th style="color:#667eea;">HireAI</th></tr>
+    <tr><td>Writes code</td><td>✅</td><td>✅</td><td>✅</td><td class="us">✅</td></tr>
+    <tr><td>Understands codebase</td><td>❌</td><td>Partial</td><td>✅</td><td class="us">✅</td></tr>
+    <tr><td>Submits PRs autonomously</td><td>❌</td><td>❌</td><td>✅</td><td class="us">✅</td></tr>
+    <tr><td>Responds to code reviews</td><td>❌</td><td>❌</td><td>❌</td><td class="us">✅</td></tr>
+    <tr><td>Team communication (Slack)</td><td>❌</td><td>❌</td><td>❌</td><td class="us">✅</td></tr>
+    <tr><td>Auto standup & reports</td><td>❌</td><td>❌</td><td>❌</td><td class="us">✅</td></tr>
+    <tr><td>Persistent memory</td><td>❌</td><td>❌</td><td>Partial</td><td class="us">✅</td></tr>
+    <tr><td>Acts as team member</td><td>❌</td><td>❌</td><td>❌</td><td class="us">✅ ★</td></tr>
+    <tr><td>Pricing</td><td>Per-seat</td><td>Per-seat</td><td>Per-seat</td><td class="us">Per-worker</td></tr>
+  </table>
+  
+  <div style="margin-top:30px; display:flex; gap:30px;">
+    <div style="flex:1;padding:20px;background:rgba(255,255,255,0.02);border-radius:12px;border:1px solid rgba(255,255,255,0.06);">
+      <div style="font-size:14px;color:rgba(255,255,255,0.4);margin-bottom:8px;">COPILOT / CURSOR</div>
+      <div style="font-size:16px;">Tools for developers<br><span style="color:rgba(255,255,255,0.4);">10x productivity</span></div>
+    </div>
+    <div style="flex:1;padding:20px;background:rgba(255,255,255,0.02);border-radius:12px;border:1px solid rgba(255,255,255,0.06);">
+      <div style="font-size:14px;color:rgba(255,255,255,0.4);margin-bottom:8px;">DEVIN</div>
+      <div style="font-size:16px;">Task executor<br><span style="color:rgba(255,255,255,0.4);">One thing at a time</span></div>
+    </div>
+    <div style="flex:1;padding:20px;background:rgba(102,126,234,0.08);border-radius:12px;border:1px solid rgba(102,126,234,0.3);">
+      <div style="font-size:14px;color:#667eea;margin-bottom:8px;">HIREAI ★</div>
+      <div style="font-size:16px;color:#667eea;">Virtual employee<br><span style="color:rgba(102,126,234,0.6);">Continuous, autonomous, communicative</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 9: Technology Moat -->
+<div class="slide">
+  <div class="slide-number">09</div>
+  <h1>Technology <span>Moat</span></h1>
+  <h2>Why this is hard to replicate</h2>
+  
+  <div class="moat-grid">
+    <div class="moat-card">
+      <div class="moat-num">MOAT 01</div>
+      <div class="moat-title">Multi-Model Orchestration</div>
+      <div class="moat-desc">Proprietary routing across Claude, GPT, and Gemini. Each model handles what it's best at. Dynamic fallback and cost optimization.</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-num">MOAT 02</div>
+      <div class="moat-title">Persistent Memory Architecture</div>
+      <div class="moat-desc">3-tier memory (session → episodic → semantic). AI remembers codebase conventions, past decisions, team preferences. Gets smarter over time.</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-num">MOAT 03</div>
+      <div class="moat-title">Human Simulation Layer</div>
+      <div class="moat-desc">Natural communication cadence, consistent personality, context-aware responses. Not a bot — a convincing team member.</div>
+    </div>
+    <div class="moat-card">
+      <div class="moat-num">MOAT 04</div>
+      <div class="moat-title">Deep Workflow Integration</div>
+      <div class="moat-desc">End-to-end: ticket → understand → code → PR → review response → iterate → merge. Not just GitHub — Slack, Jira, Linear, Notion.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 10: Team -->
+<div class="slide">
+  <div class="slide-number">10</div>
+  <h1>The <span>Team</span></h1>
+  <h2>Built by engineers who've been living this problem</h2>
+  
+  <div class="two-col" style="align-items:start;">
+    <div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:30px;">
+        <div style="font-size:24px;font-weight:700;margin-bottom:4px;">Wesley</div>
+        <div style="font-size:14px;color:#667eea;margin-bottom:16px;">Founder & CEO</div>
+        <ul>
+          <li>12+ years full-stack engineering</li>
+          <li>Ex-Tencent WeChat Pay — payment infra for 1B+ users</li>
+          <li>Built AI agent orchestration managing 50+ daily tasks</li>
+          <li>Shipped platforms with $200K+ GMV, 50K+ MAU</li>
+          <li>Active open-source contributor (OCPlatform)</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div style="background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.1);border-radius:16px;padding:30px;text-align:center;">
+        <div style="font-size:48px;margin-bottom:16px;">🎯</div>
+        <div style="font-size:18px;font-weight:600;margin-bottom:12px;">Key Hires (Post-Seed)</div>
+        <ul style="text-align:left;">
+          <li>Head of Engineering — Platform & reliability</li>
+          <li>Head of Growth — Sales & partnerships</li>
+          <li>ML Engineer — Model fine-tuning & eval</li>
+        </ul>
+      </div>
+      
+      <div style="margin-top:24px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;">
+        <div style="font-size:14px;color:rgba(255,255,255,0.4);margin-bottom:12px;">WHY US</div>
+        <p style="font-size:15px;color:rgba(255,255,255,0.7);line-height:1.6;">
+          We've been <strong>using AI agents to do real work daily</strong> for 2+ years. We built the memory and orchestration tech ourselves. We understand both AI capabilities and developer workflows deeply.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 11: Vision Timeline -->
+<div class="slide">
+  <div class="slide-number">11</div>
+  <h1>The <span>Vision</span></h1>
+  <h2>The future of work is AI-native</h2>
+  
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-year">2020</div>
+      <div class="timeline-text">Companies hire remote developers</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2023</div>
+      <div class="timeline-text">Developers use AI copilots to code faster</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2025</div>
+      <div class="timeline-text">AI agents complete tasks autonomously</div>
+    </div>
+    <div class="timeline-item current">
+      <div class="timeline-year" style="color:#ffd700;">2026</div>
+      <div class="timeline-text" style="color:#ffd700;font-weight:700;">★ HireAI launches — AI employees join real teams</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2028</div>
+      <div class="timeline-text">30% of routine development done by AI workers</div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-year">2030</div>
+      <div class="timeline-text">AI workforce becomes standard — like cloud computing in 2015</div>
+    </div>
+  </div>
+  
+  <div style="text-align:center;margin-top:40px;padding:30px;background:rgba(102,126,234,0.05);border-radius:16px;border:1px solid rgba(102,126,234,0.15);">
+    <p style="font-size:22px;font-weight:300;color:rgba(255,255,255,0.7);">
+      We're not building a tool.<br>
+      <span style="font-size:28px;font-weight:700;color:#667eea;">We're building the labor force of the future.</span>
+    </p>
+  </div>
+</div>
+
+<!-- Slide 12: The Ask -->
+<div class="slide">
+  <div class="slide-number">12</div>
+  <h1>The <span>Ask</span></h1>
+  <h2>Seed Round: $2M · 18 months runway</h2>
+  
+  <div class="funds-bar">
+    <div style="flex:50;background:linear-gradient(135deg,#667eea,#764ba2);">Engineering $1M</div>
+    <div style="flex:25;background:rgba(34,197,94,0.6);">GTM $500K</div>
+    <div style="flex:15;background:rgba(234,179,8,0.6);">Compute $300K</div>
+    <div style="flex:10;background:rgba(255,255,255,0.2);">Ops $200K</div>
+  </div>
+  
+  <h3 style="color:rgba(255,255,255,0.5);font-size:14px;margin:30px 0 16px;">MILESTONES THIS ROUND GETS US TO</h3>
+  
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="number">50</div>
+      <div class="label">Paying customers</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">$100K</div>
+      <div class="label">Monthly Recurring Revenue</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">$1.2M</div>
+      <div class="label">Annual Run Rate</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">Series A</div>
+      <div class="label">Ready for $10-15M raise</div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 13: CTA -->
+<div class="slide cta">
+  <div class="slide-number">13</div>
+  <div class="logo">HireAI</div>
+  <h1>Let's Build the Future<br>of <span>Work</span> Together</h1>
+  <div class="contact">
+    <p><strong>Wesley</strong> — Founder & CEO</p>
+    <p style="margin-top:12px;">📧 <a href="mailto:imwyvern@gmail.com">imwyvern@gmail.com</a></p>
+    <p>🐙 <a href="https://github.com/imwyvern">github.com/imwyvern</a></p>
+  </div>
+  <p style="margin-top:40px;font-size:14px;color:rgba(255,255,255,0.3);">
+    The question isn't whether AI will do knowledge work.<br>
+    The question is who builds the platform that makes it happen.
+  </p>
+</div>
+
+</body>
+</html>
