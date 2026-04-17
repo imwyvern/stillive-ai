@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>StilliveAI — 智能远程工作平台</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&family=Inter:wght@300;400;600;700;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+
+body {
+  font-family: 'Noto Sans SC', 'Inter', -apple-system, sans-serif;
+  background: #0a0a0f;
+  color: #fff;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== SLIDE SYSTEM ===== */
+.slide {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 24px;
+  position: relative;
+  scroll-snap-align: start;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .slide { padding: 80px 60px; }
+}
+@media (min-width: 1200px) {
+  .slide { padding: 80px 120px; }
+}
+
+.slide-num {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.15);
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+/* ===== TYPOGRAPHY ===== */
+.title {
+  font-size: clamp(28px, 7vw, 52px);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.title .accent {
+  background: linear-gradient(135deg, #00d4aa 0%, #00b4d8 50%, #7b68ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.subtitle {
+  font-size: clamp(14px, 3.5vw, 20px);
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+/* ===== ACCENT COLORS ===== */
+:root {
+  --c1: #00d4aa;
+  --c2: #00b4d8;
+  --c3: #7b68ee;
+  --c4: #ff6b6b;
+  --glass: rgba(255,255,255,0.03);
+  --border: rgba(255,255,255,0.06);
+  --glow: rgba(0,212,170,0.15);
+}
+
+/* ===== GLASS CARDS ===== */
+.card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+}
+
+/* ===== GRID SYSTEM ===== */
+.grid-2 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+@media (min-width: 768px) {
+  .grid-2 { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+}
+
+/* ===== STAT CARD ===== */
+.stat {
+  text-align: center;
+  padding: 20px 12px;
+}
+.stat .num {
+  font-size: clamp(28px, 6vw, 44px);
+  font-weight: 900;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, var(--c1), var(--c3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+.stat .lbl {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* ===== FLOW DIAGRAM ===== */
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0;
+}
+@media (min-width: 768px) {
+  .flow { flex-direction: row; align-items: center; }
+}
+.flow-step {
+  flex: 1;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  position: relative;
+}
+.flow-step .emoji { font-size: 28px; margin-bottom: 8px; }
+.flow-step .ftitle { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.flow-step .fdesc { font-size: 12px; color: rgba(255,255,255,0.4); }
+.flow-step.highlight-step {
+  border-color: var(--c1);
+  background: rgba(0,212,170,0.05);
+  box-shadow: 0 0 30px rgba(0,212,170,0.1);
+}
+.flow-arrow {
+  text-align: center;
+  font-size: 20px;
+  color: var(--c1);
+  transform: rotate(90deg);
+  padding: 4px;
+}
+@media (min-width: 768px) {
+  .flow-arrow { transform: rotate(0deg); }
+}
+
+/* ===== COMPARISON TABLE ===== */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 16px 0;
+}
+.compare-table th {
+  text-align: left;
+  padding: 10px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.3);
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.compare-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  color: rgba(255,255,255,0.7);
+  white-space: nowrap;
+}
+.compare-table .win { color: var(--c1); font-weight: 700; }
+.compare-table .lose { color: rgba(255,255,255,0.25); }
+.compare-table tr:last-child td { border-bottom: none; }
+
+/* ===== PILL ===== */
+.pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.pill-g { background: rgba(0,212,170,0.12); color: var(--c1); }
+.pill-b { background: rgba(0,180,216,0.12); color: var(--c2); }
+.pill-p { background: rgba(123,104,238,0.12); color: var(--c3); }
+
+/* ===== QUOTE ===== */
+.quote {
+  border-left: 2px solid var(--c1);
+  padding: 16px 20px;
+  margin: 20px 0;
+  background: rgba(0,212,170,0.03);
+  border-radius: 0 12px 12px 0;
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  font-style: italic;
+  line-height: 1.7;
+}
+.quote .author {
+  font-style: normal;
+  font-size: 12px;
+  color: rgba(255,255,255,0.3);
+  margin-top: 8px;
+}
+
+/* ===== TIMELINE ===== */
+.timeline { margin: 24px 0; }
+.tl-item {
+  display: flex;
+  gap: 16px;
+  padding: 12px 0;
+  position: relative;
+}
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 28px;
+  bottom: -12px;
+  width: 2px;
+  background: rgba(255,255,255,0.06);
+}
+.tl-item:last-child::before { display: none; }
+.tl-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.2);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.tl-item.active .tl-dot {
+  background: var(--c1);
+  border-color: var(--c1);
+  box-shadow: 0 0 12px rgba(0,212,170,0.5);
+}
+.tl-year {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.3);
+  min-width: 50px;
+}
+.tl-item.active .tl-year { color: var(--c1); }
+.tl-text { font-size: 14px; color: rgba(255,255,255,0.6); }
+.tl-item.active .tl-text { color: #fff; font-weight: 600; }
+
+/* ===== MONEY BAR ===== */
+.money-bar {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 32px;
+  margin: 20px 0;
+  font-size: 11px;
+  font-weight: 600;
+}
+.money-bar > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+/* ===== FEATURE LIST ===== */
+.feat-list { list-style: none; padding: 0; }
+.feat-list li {
+  padding: 8px 0;
+  padding-left: 20px;
+  position: relative;
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+}
+.feat-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--c1);
+  font-weight: 700;
+}
+
+/* ===== COVER ===== */
+.cover {
+  background: radial-gradient(ellipse at 30% 50%, rgba(0,212,170,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 80%, rgba(123,104,238,0.06) 0%, transparent 50%);
+  text-align: center;
+  align-items: center;
+}
+.cover .logo {
+  font-size: clamp(42px, 10vw, 72px);
+  font-weight: 900;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, var(--c1), var(--c2), var(--c3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+  letter-spacing: -2px;
+}
+.cover .tagline {
+  font-size: clamp(16px, 4vw, 24px);
+  font-weight: 400;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 8px;
+}
+.cover .tagline-en {
+  font-size: clamp(12px, 3vw, 16px);
+  font-weight: 300;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 40px;
+  font-family: 'Inter', sans-serif;
+}
+.cover .round-badge {
+  display: inline-block;
+  padding: 8px 24px;
+  border: 1px solid rgba(0,212,170,0.3);
+  border-radius: 30px;
+  font-size: 14px;
+  color: var(--c1);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* ===== CTA ===== */
+.cta {
+  background: radial-gradient(ellipse at 50% 50%, rgba(0,212,170,0.06) 0%, transparent 60%);
+  text-align: center;
+  align-items: center;
+}
+.cta .contact-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 24px;
+  max-width: 400px;
+  width: 100%;
+  margin-top: 32px;
+}
+.cta .contact-card .name {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.cta .contact-card .role {
+  font-size: 13px;
+  color: var(--c1);
+  margin-bottom: 16px;
+}
+.cta .contact-card .info {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  line-height: 2;
+}
+.cta .contact-card .info a {
+  color: var(--c2);
+  text-decoration: none;
+}
+
+/* ===== INCOME MODEL ===== */
+.income-model {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin: 20px 0;
+}
+@media (min-width: 768px) {
+  .income-model { grid-template-columns: 1fr 1fr; }
+}
+.income-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.income-card .ic-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.income-card .ic-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.income-card .ic-row:last-child { border-bottom: none; }
+.income-card .ic-row .val { color: var(--c1); font-weight: 600; }
+.income-card .ic-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.income-card .ic-total .val {
+  background: linear-gradient(135deg, var(--c1), var(--c3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== RISK TAG ===== */
+.risk-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 20px 0; }
+@media (min-width: 768px) { .risk-grid { grid-template-columns: 1fr 1fr; } }
+.risk-item {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.risk-item .ri-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.risk-item .ri-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.risk-item .ri-tag.high { background: rgba(255,107,107,0.15); color: var(--c4); }
+.risk-item .ri-tag.med { background: rgba(234,179,8,0.15); color: #eab308; }
+.risk-item .ri-tag.low { background: rgba(0,212,170,0.15); color: var(--c1); }
+.risk-item .ri-title { font-size: 14px; font-weight: 600; }
+.risk-item .ri-solution { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; margin-top: 6px; }
+
+/* Decorative elements */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+/* Section divider */
+.divider {
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--c1), var(--c3));
+  border-radius: 2px;
+  margin-bottom: 24px;
+}
+</style>
+</head>
+<body>
+
+<!-- ========== SLIDE 1: COVER ========== -->
+<div class="slide cover">
+  <div class="slide-num">01</div>
+  <div class="glow-orb" style="width:300px;height:300px;background:rgba(0,212,170,0.1);top:-50px;left:-50px;"></div>
+  <div class="glow-orb" style="width:200px;height:200px;background:rgba(123,104,238,0.1);bottom:50px;right:-30px;"></div>
+  
+  <div class="logo">StilliveAI</div>
+  <div class="tagline">AI 驱动的远程工作交付平台</div>
+  <div class="tagline-en">AI-Powered Remote Work Delivery Platform</div>
+  <div class="round-badge">种子轮融资 · ¥1500 万</div>
+</div>
+
+<!-- ========== SLIDE 2: 痛点 ========== -->
+<div class="slide">
+  <div class="slide-num">02</div>
+  <div class="divider"></div>
+  <div class="title">远程工作的<span class="accent">效率困境</span></div>
+  <div class="subtitle">全球远程开发市场 $450 亿，但 70% 的远程岗位面临交付质量问题</div>
+  
+  <div class="grid-4">
+    <div class="card stat">
+      <div class="num">2700万</div>
+      <div class="lbl">全球开发者缺口</div>
+    </div>
+    <div class="card stat">
+      <div class="num">62天</div>
+      <div class="lbl">平均招聘周期</div>
+    </div>
+    <div class="card stat">
+      <div class="num">40%</div>
+      <div class="lbl">远程员工实际产出低于预期</div>
+    </div>
+    <div class="card stat">
+      <div class="num">¥25万</div>
+      <div class="lbl">单次招聘综合成本</div>
+    </div>
+  </div>
+  
+  <div class="quote">
+    "我们招了 3 个月的远程开发，面试 50 人，入职 2 个，1 个月后走了 1 个。剩下的那个每天在划水，代码质量一塌糊涂。"
+    <div class="author">— 某 B 轮 SaaS 公司 CTO</div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 3: 核心洞察 ========== -->
+<div class="slide">
+  <div class="slide-num">03</div>
+  <div class="glow-orb" style="width:250px;height:250px;background:rgba(0,180,216,0.08);top:20%;right:-50px;"></div>
+  <div class="divider"></div>
+  <div class="title">一个<span class="accent">反直觉</span>的事实</div>
+  <div class="subtitle">2026 年的 AI 已经能独立完成大部分日常开发任务</div>
+  
+  <div class="grid-2" style="margin:24px 0;">
+    <div class="card" style="border-color:rgba(255,107,107,0.2);">
+      <div style="font-size:14px;font-weight:600;margin-bottom:12px;color:var(--c4);">❌ 传统模式</div>
+      <ul class="feat-list">
+        <li style="color:rgba(255,255,255,0.4);">招人 → 面试 → 入职 → 磨合 → 产出</li>
+        <li style="color:rgba(255,255,255,0.4);">周期 2-3 个月，还不一定靠谱</li>
+        <li style="color:rgba(255,255,255,0.4);">远程管理难，沟通成本高</li>
+        <li style="color:rgba(255,255,255,0.4);">人员流动 → 知识断层</li>
+      </ul>
+    </div>
+    <div class="card" style="border-color:rgba(0,212,170,0.2);background:rgba(0,212,170,0.02);">
+      <div style="font-size:14px;font-weight:600;margin-bottom:12px;color:var(--c1);">✅ StilliveAI 模式</div>
+      <ul class="feat-list">
+        <li>专业团队接单 → AI 完成 80% 执行</li>
+        <li>即开即用，无磨合期</li>
+        <li>24 小时响应，代码质量稳定</li>
+        <li>知识永不流失，持续积累</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div style="text-align:center;padding:16px;background:rgba(0,212,170,0.05);border-radius:12px;border:1px solid rgba(0,212,170,0.15);">
+    <div style="font-size:14px;color:rgba(255,255,255,0.5);">核心公式</div>
+    <div style="font-size:clamp(16px,4vw,22px);font-weight:700;margin-top:8px;">
+      <span class="accent">专业人才把关</span> × <span class="accent">AI 规模化执行</span> = 超高性价比交付
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 4: 商业模式 ========== -->
+<div class="slide">
+  <div class="slide-num">04</div>
+  <div class="divider"></div>
+  <div class="title">我们怎么<span class="accent">赚钱</span></div>
+  <div class="subtitle">人机协作的远程开发外包，利润率碾压传统模式</div>
+  
+  <div class="flow">
+    <div class="flow-step">
+      <div class="emoji">🎯</div>
+      <div class="ftitle">接单</div>
+      <div class="fdesc">Boss/拉勾/LinkedIn<br>精准匹配远程岗位</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="emoji">👤</div>
+      <div class="ftitle">人工面试</div>
+      <div class="fdesc">资深工程师通过面试<br>建立客户信任</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step highlight-step">
+      <div class="emoji">🤖</div>
+      <div class="ftitle">AI 交付</div>
+      <div class="fdesc">AI 完成 80% 日常开发<br>人工审核把关质量</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="emoji">💰</div>
+      <div class="ftitle">持续收入</div>
+      <div class="fdesc">按月收取远程工资<br>稳定现金流</div>
+    </div>
+  </div>
+  
+  <div class="income-model">
+    <div class="income-card">
+      <div class="ic-title">💼 单人模型（国内远程岗）</div>
+      <div class="ic-row"><span>月薪收入</span><span class="val">¥25,000</span></div>
+      <div class="ic-row"><span>AI API 成本</span><span>-¥1,500</span></div>
+      <div class="ic-row"><span>运营监督成本</span><span>-¥3,000</span></div>
+      <div class="ic-total"><span>净利润/月</span><span class="val">¥20,500（82%）</span></div>
+    </div>
+    <div class="income-card">
+      <div class="ic-title">🌏 单人模型（海外远程岗）</div>
+      <div class="ic-row"><span>月薪收入</span><span class="val">$8,000</span></div>
+      <div class="ic-row"><span>AI API 成本</span><span>-$300</span></div>
+      <div class="ic-row"><span>运营监督成本</span><span>-$500</span></div>
+      <div class="ic-total"><span>净利润/月</span><span class="val">$7,200（90%）</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 5: 规模化路径 ========== -->
+<div class="slide">
+  <div class="slide-num">05</div>
+  <div class="divider"></div>
+  <div class="title">规模化<span class="accent">想象力</span></div>
+  <div class="subtitle">1 个运营管 5 个 AI 工位，边际成本趋近于零</div>
+  
+  <div class="grid-3">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:12px;color:var(--c1);font-weight:600;margin-bottom:8px;">PHASE 1 · 6个月</div>
+      <div style="font-size:28px;font-weight:900;color:var(--c1);">5人</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.4);margin:8px 0;">1 个运营 + 5 个 AI 工位</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);border-top:1px solid var(--border);padding-top:8px;margin-top:8px;">
+        月收入 ¥12.5万<br>净利润 ¥10万/月
+      </div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:12px;color:var(--c2);font-weight:600;margin-bottom:8px;">PHASE 2 · 12个月</div>
+      <div style="font-size:28px;font-weight:900;color:var(--c2);">20人</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.4);margin:8px 0;">4 个运营 + 20 个 AI 工位</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);border-top:1px solid var(--border);padding-top:8px;margin-top:8px;">
+        月收入 ¥50万<br>净利润 ¥38万/月
+      </div>
+    </div>
+    <div class="card" style="text-align:center;border-color:rgba(123,104,238,0.3);">
+      <div style="font-size:12px;color:var(--c3);font-weight:600;margin-bottom:8px;">PHASE 3 · 24个月</div>
+      <div style="font-size:28px;font-weight:900;color:var(--c3);">100人</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.4);margin:8px 0;">15 个运营 + 100 个 AI 工位</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3);border-top:1px solid var(--border);padding-top:8px;margin-top:8px;">
+        月收入 ¥250万<br>净利润 ¥180万/月
+      </div>
+    </div>
+  </div>
+  
+  <div class="card" style="margin-top:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.3);">传统外包公司利润率</div>
+        <div style="font-size:20px;font-weight:700;color:rgba(255,255,255,0.4);">30-40%</div>
+      </div>
+      <div style="font-size:24px;color:var(--c1);">→</div>
+      <div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.3);">StilliveAI 利润率</div>
+        <div style="font-size:20px;font-weight:700;color:var(--c1);">80-90%</div>
+      </div>
+      <div style="font-size:24px;color:var(--c1);">→</div>
+      <div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.3);">24个月年化利润</div>
+        <div style="font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--c1),var(--c3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">¥2160 万+</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 6: 技术壁垒 ========== -->
+<div class="slide">
+  <div class="slide-num">06</div>
+  <div class="divider"></div>
+  <div class="title">技术<span class="accent">壁垒</span></div>
+  <div class="subtitle">不是简单调 API，而是一套完整的 AI 工程师模拟系统</div>
+  
+  <div class="grid-2">
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;color:var(--c1);margin-bottom:8px;">壁垒 01</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:8px;">多模型智能调度</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.4);line-height:1.6;">Claude / GPT / Gemini 动态路由，每个模型做它最擅长的事。成本优化 + 质量最大化。</div>
+    </div>
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;color:var(--c2);margin-bottom:8px;">壁垒 02</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:8px;">三层持久记忆</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.4);line-height:1.6;">会话记忆 → 情节记忆 → 语义记忆。记住代码规范、团队偏好、历史决策。越用越懂项目。</div>
+    </div>
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;color:var(--c3);margin-bottom:8px;">壁垒 03</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:8px;">人格模拟引擎</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.4);line-height:1.6;">自然的沟通节奏、一致的性格表现、上下文感知回复。在 Slack 里你分不出是人还是 AI。</div>
+    </div>
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;color:#eab308;margin-bottom:8px;">壁垒 04</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:8px;">全链路工作流</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.4);line-height:1.6;">需求理解 → 编码 → PR → Review → 修改 → 合并 → 日报。不是工具，是一个完整的工作人格。</div>
+    </div>
+  </div>
+  
+  <div class="quote">
+    我们已经用这套系统运行了 2 年+，日均处理 50+ 自主任务，任务完成率 80%。这不是 demo，是生产环境。
+  </div>
+</div>
+
+<!-- ========== SLIDE 7: AI 能做什么 ========== -->
+<div class="slide">
+  <div class="slide-num">07</div>
+  <div class="divider"></div>
+  <div class="title">AI 能做的<span class="accent">比你想的多</span></div>
+  <div class="subtitle">2026 年的 AI 已覆盖日常开发 80% 的工作量</div>
+  
+  <div style="overflow-x:auto;">
+    <table class="compare-table">
+      <tr><th>工作内容</th><th>AI 能力</th><th>人工介入</th></tr>
+      <tr><td>Bug 修复</td><td class="win">✅ 独立完成</td><td class="lose">仅复杂 bug</td></tr>
+      <tr><td>功能开发</td><td class="win">✅ 中等复杂度</td><td>架构决策</td></tr>
+      <tr><td>单元测试</td><td class="win">✅ 独立完成</td><td class="lose">无需介入</td></tr>
+      <tr><td>代码重构</td><td class="win">✅ 独立完成</td><td class="lose">仅大规模</td></tr>
+      <tr><td>文档编写</td><td class="win">✅ 独立完成</td><td class="lose">无需介入</td></tr>
+      <tr><td>Code Review</td><td class="win">✅ 响应 Review</td><td class="lose">无需介入</td></tr>
+      <tr><td>日报/周报</td><td class="win">✅ 自动生成</td><td class="lose">无需介入</td></tr>
+      <tr><td>Slack 沟通</td><td class="win">✅ 自然对话</td><td>敏感话题</td></tr>
+      <tr><td>架构设计</td><td>⚠️ 辅助</td><td>人工主导</td></tr>
+      <tr><td>需求评审</td><td>⚠️ 辅助</td><td>人工主导</td></tr>
+    </table>
+  </div>
+  
+  <div style="text-align:center;margin-top:16px;">
+    <span class="pill pill-g">80% AI 独立完成</span>
+    <span class="pill pill-b" style="margin-left:8px;">15% AI 辅助</span>
+    <span class="pill pill-p" style="margin-left:8px;">5% 纯人工</span>
+  </div>
+</div>
+
+<!-- ========== SLIDE 8: 市场规模 ========== -->
+<div class="slide">
+  <div class="slide-num">08</div>
+  <div class="divider"></div>
+  <div class="title">市场<span class="accent">规模</span></div>
+  <div class="subtitle">切的是全球软件开发劳动力市场，不是工具市场</div>
+  
+  <div style="display:flex;align-items:center;justify-content:center;gap:20px;margin:30px 0;flex-wrap:wrap;">
+    <div style="width:clamp(120px,30vw,200px);height:clamp(120px,30vw,200px);border-radius:50%;border:2px solid rgba(0,212,170,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,212,170,0.03);">
+      <div style="font-size:clamp(20px,5vw,32px);font-weight:900;color:var(--c1);">$3000亿</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);">TAM · 全球开发劳动力</div>
+    </div>
+    <div style="width:clamp(90px,22vw,150px);height:clamp(90px,22vw,150px);border-radius:50%;border:2px solid rgba(0,180,216,0.3);display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,180,216,0.03);">
+      <div style="font-size:clamp(16px,4vw,24px);font-weight:900;color:var(--c2);">$450亿</div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);">SAM · 远程开发</div>
+    </div>
+    <div style="width:clamp(70px,18vw,110px);height:clamp(70px,18vw,110px);border-radius:50%;border:2px solid rgba(123,104,238,0.3);display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(123,104,238,0.03);">
+      <div style="font-size:clamp(14px,3vw,18px);font-weight:900;color:var(--c3);">¥5亿</div>
+      <div style="font-size:9px;color:rgba(255,255,255,0.4);">SOM · 3年</div>
+    </div>
+  </div>
+  
+  <div class="card" style="text-align:center;">
+    <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:8px;">可拓展领域</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
+      <span class="pill pill-g">后端开发</span>
+      <span class="pill pill-g">前端开发</span>
+      <span class="pill pill-b">QA 测试</span>
+      <span class="pill pill-b">DevOps</span>
+      <span class="pill pill-p">数据工程</span>
+      <span class="pill pill-p">技术文档</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 9: 风险与应对 ========== -->
+<div class="slide">
+  <div class="slide-num">09</div>
+  <div class="divider"></div>
+  <div class="title">风险<span class="accent">评估</span></div>
+  <div class="subtitle">我们正视每一个风险，并有明确的应对策略</div>
+  
+  <div class="risk-grid">
+    <div class="risk-item">
+      <div class="ri-head">
+        <span class="ri-tag med">中</span>
+        <span class="ri-title">AI 输出质量波动</span>
+      </div>
+      <div class="ri-solution">
+        <strong>应对：</strong>多模型交叉验证 + 自动化测试覆盖 + 人工 Review 兜底。设置质量门禁，低于阈值自动回退人工。
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="ri-head">
+        <span class="ri-tag med">中</span>
+        <span class="ri-title">客户发现是 AI</span>
+      </div>
+      <div class="ri-solution">
+        <strong>应对：</strong>人格一致性引擎 + 自然沟通节奏 + 合理上下线时间。同时准备 B 计划：透明化 → 转为 AI 增强开发服务。
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="ri-head">
+        <span class="ri-tag low">低</span>
+        <span class="ri-title">竞争对手复制</span>
+      </div>
+      <div class="ri-solution">
+        <strong>应对：</strong>先发优势 + 持久记忆的数据飞轮 + 客户关系壁垒。这个业务的壁垒在运营而非技术。
+      </div>
+    </div>
+    <div class="risk-item">
+      <div class="ri-head">
+        <span class="ri-tag low">低</span>
+        <span class="ri-title">API 成本上升</span>
+      </div>
+      <div class="ri-solution">
+        <strong>应对：</strong>多模型切换降成本 + 本地模型备选 + 智能缓存。当前毛利 80%+，有极大缓冲空间。
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 10: 团队 ========== -->
+<div class="slide">
+  <div class="slide-num">10</div>
+  <div class="divider"></div>
+  <div class="title">创始<span class="accent">团队</span></div>
+  <div class="subtitle">不是在讲故事，是已经跑通了的人</div>
+  
+  <div class="card" style="margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;flex-wrap:wrap;">
+      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--c3));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;flex-shrink:0;">W</div>
+      <div>
+        <div style="font-size:20px;font-weight:700;">Wesley</div>
+        <div style="font-size:13px;color:var(--c1);">创始人 & CEO</div>
+      </div>
+    </div>
+    <ul class="feat-list">
+      <li>12+ 年全栈工程经验</li>
+      <li>前腾讯微信支付 — 10 亿+ 用户支付基础设施</li>
+      <li>独立构建 AI Agent 编排系统，日均 50+ 自主任务</li>
+      <li>交付过多个 $200K+ GMV、50K+ MAU 的平台项目</li>
+      <li>开源贡献者 — OCPlatform AI Agent 框架</li>
+    </ul>
+  </div>
+  
+  <div class="grid-2">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-bottom:8px;">已验证</div>
+      <div style="font-size:14px;font-weight:600;">已用 AI 完成真实远程工作 2 年+</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px;">不是理论，是实战经验</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-bottom:8px;">种子轮后关键招聘</div>
+      <div style="font-size:14px;font-weight:600;">运营负责人 · AI 工程师 · 增长负责人</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px;">已有候选人储备</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 11: 融资计划 ========== -->
+<div class="slide">
+  <div class="slide-num">11</div>
+  <div class="divider"></div>
+  <div class="title">融资<span class="accent">计划</span></div>
+  <div class="subtitle">种子轮 ¥1500 万 · 18 个月 Runway</div>
+  
+  <div class="money-bar">
+    <div style="flex:40;background:linear-gradient(135deg,var(--c1),var(--c2));">技术 40%</div>
+    <div style="flex:25;background:rgba(123,104,238,0.7);">运营 25%</div>
+    <div style="flex:20;background:rgba(234,179,8,0.6);">市场 20%</div>
+    <div style="flex:15;background:rgba(255,255,255,0.15);">储备 15%</div>
+  </div>
+  
+  <div class="grid-4" style="margin:24px 0;">
+    <div class="card stat">
+      <div class="num">20</div>
+      <div class="lbl">AI 工位上线</div>
+    </div>
+    <div class="card stat">
+      <div class="num">¥50万</div>
+      <div class="lbl">月收入目标</div>
+    </div>
+    <div class="card stat">
+      <div class="num">¥600万</div>
+      <div class="lbl">年化收入</div>
+    </div>
+    <div class="card stat">
+      <div class="num">A 轮</div>
+      <div class="lbl">18 个月后</div>
+    </div>
+  </div>
+  
+  <div class="timeline">
+    <div class="tl-item active">
+      <div class="tl-dot"></div>
+      <div class="tl-year">现在</div>
+      <div class="tl-text">完成种子轮融资，启动规模化</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">M3</div>
+      <div class="tl-text">5 个 AI 工位上线，月收入 ¥12.5 万</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">M6</div>
+      <div class="tl-text">10 个 AI 工位，首个海外客户</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">M12</div>
+      <div class="tl-text">20 个 AI 工位，月收入 ¥50 万</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">M18</div>
+      <div class="tl-text">启动 A 轮，目标 ¥5000 万</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 12: CTA ========== -->
+<div class="slide cta">
+  <div class="slide-num">12</div>
+  <div class="glow-orb" style="width:300px;height:300px;background:rgba(0,212,170,0.06);top:20%;left:10%;"></div>
+  
+  <div class="logo" style="font-size:clamp(36px,8vw,56px);background:linear-gradient(135deg,var(--c1),var(--c2),var(--c3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Inter',sans-serif;font-weight:900;letter-spacing:-2px;">StilliveAI</div>
+  
+  <div class="title" style="margin-top:16px;">
+    让 AI 成为<br><span class="accent">最高效的远程员工</span>
+  </div>
+  
+  <div class="contact-card">
+    <div class="name">Wesley</div>
+    <div class="role">创始人 & CEO</div>
+    <div class="info">
+      📧 <a href="mailto:imwyvern@gmail.com">imwyvern@gmail.com</a><br>
+      🐙 <a href="https://github.com/imwyvern">github.com/imwyvern</a><br>
+      💬 微信: imwyvern
+    </div>
+  </div>
+  
+  <div style="margin-top:32px;font-size:13px;color:rgba(255,255,255,0.2);max-width:400px;line-height:1.6;">
+    问题不是 AI 能不能做知识工作，<br>
+    而是谁先把它工程化、规模化。
+  </div>
+</div>
+
+</body>
+</html>
